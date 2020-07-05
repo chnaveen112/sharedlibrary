@@ -1,12 +1,17 @@
-def call(){
-sshagent(['tomcat']) {
+def call(config){
+        def credId = config['credId']
+        def ip = config['ip']
+        def userName = config['userName']
+        def tomcatHome = config['tomcatHome']
+        def warName = config['warName']
+sshagent(['credId']) {
         //to stop the tomcat server
-             sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.9.71 /opt/tomcat8/bin/shutdown.sh"
+        sh "ssh -o StrictHostKeyChecking=no ${userName}@${ip} ${tomcatHome}/bin/shutdown.sh"
         //delete old war file from tomcat
-             sh "ssh ec2-user@172.31.9.71 rm -rf /opt/tomcat8/webapps/springmvc*"
+        sh "ssh ${userName}@${ip} rm -rf ${tomcatHome}/webapps/${warName}*"
         // copy latest war from jenkins to tomcat using scp command
-             sh "scp target/springmvc.war ec2-user@172.31.9.71:/opt/tomcat8/webapps/"
+             sh "scp target/springmvc.war ${userName}@${ip}:${tomcatHome}/webapps/"
         //start the server  
-             sh "ssh ec2-user@172.31.9.71 /opt/tomcat8/bin/startup.sh"
+             sh "ssh ${userName}@${ip} ${tomcatHome}/bin/startup.sh"
 }
 }
