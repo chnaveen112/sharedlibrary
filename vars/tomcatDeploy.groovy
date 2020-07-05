@@ -4,7 +4,7 @@ def call(config){
         def userName = config['userName']
         def tomcatHome = config['tomcatHome']
         def warName = config['warName']
-sshagent(['credId']) {
+sshagent([credId]) {
         //to stop the tomcat server
         sh "ssh -o StrictHostKeyChecking=no ${userName}@${ip} ${tomcatHome}/bin/shutdown.sh"
         //delete old war file from tomcat
